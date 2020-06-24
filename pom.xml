@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>schema-crawler</groupId>
+	<artifactId>schemacrawler-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/us.fatehi/schemacrawler -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>us.fatehi</groupId> -->
+<!-- 			<artifactId>schemacrawler</artifactId> -->
+<!-- 			<version>16.9.1</version> -->
+<!-- 		</dependency> -->
+
+
+		<!-- https://mvnrepository.com/artifact/us.fatehi/schemacrawler-scripting -->
+		<dependency>
+			<groupId>us.fatehi</groupId>
+			<artifactId>schemacrawler-scripting</artifactId>
+			<version>16.9.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.30</version>
+		</dependency>
+	</dependencies>
+
+</project>
