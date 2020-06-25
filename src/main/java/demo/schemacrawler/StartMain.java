@@ -23,7 +23,7 @@ public class StartMain {
 		log.info("Properties: {}", prop);
 		try (Connection connection = getConnection(prop)) {
 			SchemaUtil schemaUtil = new SchemaUtil();
-			schemaUtil.createJsonFileTables(connection, prop);
+			//schemaUtil.createJsonFileTables(connection, prop);
 			schemaUtil.compare(connection, prop);
 		} catch (Exception e) {
 			log.error("Error: ", e);

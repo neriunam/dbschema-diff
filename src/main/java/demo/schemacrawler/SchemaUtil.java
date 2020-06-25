@@ -27,6 +27,7 @@ import schemacrawler.utility.SchemaCrawlerUtility;
 public class SchemaUtil {
 		
 	public void compare(Connection connection, Properties prop) throws Exception {
+		log.info("Compare json schema vs database schema");
 		ObjectMapper mapper = new ObjectMapper();
 		File file = new File(prop.getProperty(Constants.IN_JSON_SCHEMA_FILE));
 		
@@ -34,18 +35,19 @@ public class SchemaUtil {
 		List<Table> tablesDatabase =  this.getTablesFromDB(connection, prop);
 		
 		for (Table tableref : tablesReference) {
+			log.info("Check table[{}]", tableref.getTableName());
 			checkTable(tableref, tablesDatabase);
 		}
 	}
 	
 	private void checkTable(Table tableref, List<Table> tablesDatabase) throws Exception {
-		log.info("Check table {}", tableref.getTableName());
+		//log.info("Check table {}", tableref.getTableName());
 		boolean tableExist = false;
 		for (Table tabledb : tablesDatabase) {
 			tableExist = tableref.getTableName().equalsIgnoreCase(tabledb.getTableName());
-			log.info("{} compare {}", tableref.getTableName(), tabledb.getTableName());
+			//log.info("{} compare {}", tableref.getTableName(), tabledb.getTableName());
 			if (tableExist) {
-				log.info("Table exist");
+				//log.info("Table exist");
 				checkColumn(tableref, tabledb);
 				break;
 			}
@@ -57,13 +59,13 @@ public class SchemaUtil {
 	
 	private void checkColumn(Table tableref, Table tabledb) throws Exception {
 		for (Entry<String, String> entry : tableref.getColumns().entrySet()) {
-			log.info("columnref: {}, typeref: {}", entry.getKey(), entry.getValue());
+			//log.info("columnref: {}, typeref: {}", entry.getKey(), entry.getValue());
 			String type = tabledb.getColumns().get(entry.getKey());
 			if (type == null) {
 				throw new Exception("Column[" + entry.getKey() + "] in Table[" + tableref.getTableName() + "] not found in database");
 			}
 			else {
-				log.info("columndb: {}, typerdb: {}", entry.getKey(), type);
+				//log.info("columndb: {}, typerdb: {}", entry.getKey(), type);
 				if (!type.equalsIgnoreCase(entry.getValue())) {
 					throw new Exception("Column[" + entry.getKey() + "] in Table[" + tableref.getTableName() + "]: type must be [" + entry.getValue() + "] but found type [" + type  + "]");
 				}
@@ -80,9 +82,11 @@ public class SchemaUtil {
 	
 	
 	private List<Table> getTablesFromDB(Connection connection, Properties prop) throws Exception {
+		String includeTables = prop.getProperty(Constants.INCLUDE_TABLES);
+		if (includeTables == null) { includeTables = ""; }
 		final LimitOptionsBuilder limitOptionsBuilder = LimitOptionsBuilder.builder()
 				.includeSchemas(new RegularExpressionInclusionRule(prop.getProperty(Constants.SCHEMA)));
-		if (prop.getProperty(Constants.INCLUDE_TABLES).trim().length() > 0) {
+		if (includeTables.length() > 0) {
 			String[] includes = prop.getProperty(Constants.INCLUDE_TABLES).split(",");
 			StringBuilder sb = new StringBuilder();
 			for (String s : includes) {
@@ -92,7 +96,8 @@ public class SchemaUtil {
 			limitOptionsBuilder.includeTables(new RegularExpressionInclusionRule(sb.toString()));
 		}
 		
-		final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder().withSchemaInfoLevel(SchemaInfoLevelBuilder.standard());
+		final LoadOptionsBuilder loadOptionsBuilder = LoadOptionsBuilder.builder()
+				.withSchemaInfoLevel(SchemaInfoLevelBuilder.standard());
 	    
 	    final SchemaCrawlerOptionsBuilder optionsBuilder = SchemaCrawlerOptionsBuilder
 	        .builder()
@@ -105,11 +110,13 @@ public class SchemaUtil {
 		List<Table> tables = new ArrayList<>();
 		Table mytable;
 		
+		StringBuilder sb = new StringBuilder("[");
 		for (final Schema schema : catalog.getSchemas()) {
 			System.out.println(schema);
 			for (final schemacrawler.schema.Table table : catalog.getTables(schema)) {
 				mytable = new Table();
-				log.info("Table: {}", table.getFullName());
+				sb.append(table.getFullName()).append(",");
+				//log.info("Table: {}", table.getFullName());
 				mytable.setTableName(table.getName());
 				mytable.setColumns(new LinkedHashMap<String, String>());
 				for (final Column column : table.getColumns()) {
@@ -118,6 +125,11 @@ public class SchemaUtil {
 				tables.add(mytable);
 			}
 		}
+		if (sb.length() > 1) {
+			sb.delete(sb.length()-1, sb.length());
+		}
+		sb.append("]");
+		log.info("Tables loaded from database: {}", sb.toString());
 		return tables;
 	}	
 	

@@ -1,0 +1,15 @@
+[ {
+  "tableName" : "DEPARTMENTS",
+  "columns" : {
+    "ID" : "INTEGER",
+    "NAME" : "VARCHAR"
+  }
+}, {
+  "tableName" : "EMPLOYEES",
+  "columns" : {
+    "ID" : "INTEGER",
+    "FIRST_NAME" : "VARCHAR",
+    "LAST_NAME" : "VARCHAR",
+    "ID_DEPARTMENT" : "INTEGER"
+  }
+} ]
