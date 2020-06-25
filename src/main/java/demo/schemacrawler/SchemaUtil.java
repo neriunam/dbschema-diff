@@ -101,6 +101,7 @@ public class SchemaUtil {
 	    
 	    final SchemaCrawlerOptions options = optionsBuilder.toOptions();
 		final Catalog catalog = SchemaCrawlerUtility.getCatalog(connection, options);
+		
 		List<Table> tables = new ArrayList<>();
 		Table mytable;
 		
