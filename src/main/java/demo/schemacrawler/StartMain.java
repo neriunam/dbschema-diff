@@ -30,7 +30,6 @@ public class StartMain {
 		}
 	}
 	
-	
 	private Connection getConnection(Properties prop) throws SQLException {
 		Properties connectionProps = new Properties();
 		connectionProps.put(Constants.USER_PARAM, prop.get(Constants.USER_DB));
