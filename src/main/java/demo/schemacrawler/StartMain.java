@@ -2,7 +2,6 @@ package demo.schemacrawler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -23,10 +22,6 @@ public class StartMain {
 		prop.load(StartMain.class.getResourceAsStream(PROPERTIES_FILE));
 		log.info("Properties: {}", prop);
 		try (Connection connection = getConnection(prop)) {
-			ResultSet rs = connection.createStatement().executeQuery("select * from employees");
-			while (rs.next()) {
-				log.info("id={}", rs.getString("id"));
-			}
 			SchemaUtil schemaUtil = new SchemaUtil();
 			schemaUtil.createJsonFileTables(connection, prop);
 			schemaUtil.compare(connection, prop);
